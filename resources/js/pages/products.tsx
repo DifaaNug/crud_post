@@ -5,7 +5,7 @@ export default function Products() {
     return (
         <AppLayout>
             <Head title="Products" />
-            
+
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -19,7 +19,7 @@ export default function Products() {
                                     Tambah Product
                                 </button>
                             </div>
-                            
+
                             <div className="text-center py-12">
                                 <div className="text-6xl mb-4">📦</div>
                                 <h3 className="text-lg font-medium text-gray-900 mb-2">
