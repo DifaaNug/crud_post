@@ -18,7 +18,7 @@ class ProductApiController extends Controller
     {
         try {
             $products = Product::orderBy('created_at', 'desc')->paginate(10);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Data products berhasil diambil',
@@ -95,7 +95,7 @@ class ProductApiController extends Controller
     {
         try {
             $product = Product::find($id);
-            
+
             if (!$product) {
                 return response()->json([
                     'success' => false,
@@ -125,7 +125,7 @@ class ProductApiController extends Controller
     {
         try {
             $product = Product::find($id);
-            
+
             if (!$product) {
                 return response()->json([
                     'success' => false,
@@ -194,7 +194,7 @@ class ProductApiController extends Controller
     {
         try {
             $product = Product::find($id);
-            
+
             if (!$product) {
                 return response()->json([
                     'success' => false,

@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\ProductApiController;
 |--------------------------------------------------------------------------
 |
 | Di sini Anda dapat mendaftarkan routes API untuk aplikasi Anda.
-| Routes ini akan dimuat oleh RouteServiceProvider dalam grup yang 
+| Routes ini akan dimuat oleh RouteServiceProvider dalam grup yang
 | sudah ditetapkan dengan middleware "api".
 |
 */
@@ -45,7 +45,7 @@ Route::get('/dashboard/stats', function () {
     $totalPosts = \App\Models\Post::count();
     $publishedPosts = \App\Models\Post::where('status', 'published')->count();
     $lowStockProducts = \App\Models\Product::where('stock', '<', 10)->count();
-    
+
     return response()->json([
         'success' => true,
         'message' => 'Statistik dashboard berhasil diambil',

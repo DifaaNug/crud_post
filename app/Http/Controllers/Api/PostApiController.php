@@ -18,7 +18,7 @@ class PostApiController extends Controller
     {
         try {
             $posts = Post::orderBy('created_at', 'desc')->paginate(10);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Data posts berhasil diambil',
@@ -91,7 +91,7 @@ class PostApiController extends Controller
     {
         try {
             $post = Post::find($id);
-            
+
             if (!$post) {
                 return response()->json([
                     'success' => false,
@@ -121,7 +121,7 @@ class PostApiController extends Controller
     {
         try {
             $post = Post::find($id);
-            
+
             if (!$post) {
                 return response()->json([
                     'success' => false,
@@ -186,7 +186,7 @@ class PostApiController extends Controller
     {
         try {
             $post = Post::find($id);
-            
+
             if (!$post) {
                 return response()->json([
                     'success' => false,
