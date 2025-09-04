@@ -12,6 +12,16 @@ interface Product {
     stock: number;
 }
 
+interface ProductFormData {
+    id?: number;
+    name: string;
+    price: number | string;
+    description: string;
+    image?: string;
+    category: string;
+    stock: number | string;
+}
+
 interface Props {
     isOpen: boolean;
     closeModal: () => void;
@@ -20,18 +30,18 @@ interface Props {
 }
 
 export default function ProductFormModal({ isOpen, closeModal, product, onSuccess }: Props) {
-    const [formData, setFormData] = useState<Product>({
+    const [formData, setFormData] = useState<ProductFormData>({
         name: "",
-        price: 0,
+        price: "",
         description: "",
         image: "",
         category: "",
-        stock: 0
+        stock: ""
     });
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string>("");
 
-    // Reset form when modal opens/closes or product changes
+    // Reset form ketika modal dibuka/ditutup atau product berubah
     useEffect(() => {
         if (product) {
             setFormData({
@@ -53,18 +63,18 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
         } else {
             setFormData({
                 name: "",
-                price: 0,
+                price: "",
                 description: "",
                 image: "",
                 category: "",
-                stock: 0
+                stock: ""
             });
             setPreview("");
             setSelectedFile(null);
         }
     }, [product]);
 
-    // Handle escape key and body scroll lock
+    // Handle tombol escape dan scroll lock pada body
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === 'Escape' && isOpen) {
@@ -83,16 +93,25 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
         };
     }, [isOpen, closeModal]);
 
-    // Handle input changes
+    // Handle perubahan input
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'number' ? parseFloat(value) || 0 : value
-        });
+        
+        if (type === 'number') {
+            // Izinkan string kosong agar bisa dihapus, convert ke number saat submit
+            setFormData({
+                ...formData,
+                [name]: value === '' ? '' : parseFloat(value) || ''
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
     };
 
-    // Handle file upload
+    // Handle upload file
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
@@ -101,23 +120,37 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
         }
     };
 
-    // Handle form submission
+    // Handle submit form
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Konversi nilai string ke number untuk validasi
+        const priceValue = typeof formData.price === 'string' ? parseFloat(formData.price) : formData.price;
+        const stockValue = typeof formData.stock === 'string' ? parseInt(formData.stock) : formData.stock;
+
+        // Validasi angka
+        if (isNaN(priceValue) || priceValue < 0) {
+            alert('Harga harus berupa angka yang valid dan tidak boleh negatif');
+            return;
+        }
+        if (isNaN(stockValue) || stockValue < 0) {
+            alert('Stock harus berupa angka yang valid dan tidak boleh negatif');
+            return;
+        }
+
         const submitData = new FormData();
         submitData.append('name', formData.name);
-        submitData.append('price', formData.price.toString());
+        submitData.append('price', priceValue.toString());
         submitData.append('description', formData.description);
         submitData.append('category', formData.category);
-        submitData.append('stock', formData.stock.toString());
+        submitData.append('stock', stockValue.toString());
 
         if (selectedFile) {
             submitData.append('image', selectedFile);
         }
 
         if (product?.id) {
-            // Update existing product
+            // Update produk yang sudah ada
             submitData.append('_method', 'PUT');
             router.post(`/products/${product.id}`, submitData, {
                 forceFormData: true,
@@ -131,7 +164,7 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
                 }
             });
         } else {
-            // Create new product
+            // Buat produk baru
             router.post('/products', submitData, {
                 forceFormData: true,
                 onSuccess: () => {
@@ -155,9 +188,9 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
     };
 
     const modalContent = (
-        <div 
+        <div
             className="modal-overlay"
-            style={{ 
+            style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -172,9 +205,9 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
             }}
             onClick={handleBackdropClick}
         >
-            <div 
+            <div
                 className="modal-content"
-                style={{ 
+                style={{
                     backgroundColor: 'white',
                     borderRadius: '8px',
                     padding: '1.5rem',
