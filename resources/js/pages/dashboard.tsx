@@ -5,6 +5,8 @@ import { Head } from '@inertiajs/react';
 import StatCard from '@/components/StatCard';
 import { BarChart, PieChart, LineChart } from '@/components/Charts';
 import RecentItems from '@/components/RecentItems';
+import ExportButton from '@/components/ExportButton';
+import { exportPosts, exportProducts } from '@/utils/exportHelpers';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -123,6 +125,24 @@ export default function Dashboard({ analytics }: DashboardProps) {
                     <p className="text-gray-600 dark:text-gray-400 mt-2">
                         Ringkasan data dan statistik aplikasi Anda
                     </p>
+                    
+                    {/* Export Actions */}
+                    <div className="flex flex-wrap gap-3 mt-4">
+                        <ExportButton
+                            label="📝 Export Posts"
+                            onExport={async () => {
+                                await exportPosts();
+                            }}
+                            variant="outline"
+                        />
+                        <ExportButton
+                            label="📦 Export Products"
+                            onExport={async () => {
+                                await exportProducts();
+                            }}
+                            variant="outline"
+                        />
+                    </div>
                 </div>
 
                 {/* Statistik Cards */}
