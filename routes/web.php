@@ -17,10 +17,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //Mendaftarkan Route Halaman Web
 Route::resource('posts', \App\Http\Controllers\PostController::class)->middleware(['auth']);
 
-// Route untuk Products - sementara halaman kosong dulu
-Route::get('products', function () {
-    return Inertia::render('products');
-})->middleware(['auth'])->name('products.index');
+// Route untuk Products CRUD
+Route::resource('products', \App\Http\Controllers\ProductController::class)->middleware(['auth']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
