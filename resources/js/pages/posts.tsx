@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Head, usePage, router } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
 import PostFormModal from "@/components/PostFormModal";
+import ExportButton from "@/components/ExportButton";
+import { exportPosts } from "@/utils/exportHelpers";
 import Swal from 'sweetalert2';
 
 export default function Posts() {
@@ -84,7 +86,17 @@ export default function Posts() {
             <Head title="Apps CRUD" />
 
             <div className="flex flex-col gap-4 sm:gap-6 p-4 sm:p-6 bg-white text-black shadow-lg rounded-xl">
-                <div className="flex justify-end">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div className="flex gap-2">
+                        <ExportButton
+                            label="📝 Export Posts"
+                            onExport={async () => {
+                                await exportPosts();
+                            }}
+                            variant="outline"
+                            size="sm"
+                        />
+                    </div>
                     <button
                         onClick={() => openModal()}
                         className="bg-green-600 text-white rounded px-3 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm hover:bg-green-700 transition shadow-md whitespace-nowrap"
