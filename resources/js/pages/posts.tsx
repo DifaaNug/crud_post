@@ -176,18 +176,18 @@ export default function Posts() {
                                     <div className="flex-1 min-w-0">
                                         <h3 className="font-medium text-gray-900 truncate">{post.title}</h3>
                                         <p className="text-sm text-gray-600 mt-1 line-clamp-2">{post.content}</p>
-                                        
+
                                         {/* Status Badge */}
                                         <div className="mt-2">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                                post.status === 'published' 
+                                                post.status === 'published'
                                                     ? 'bg-green-100 text-green-800'
                                                     : 'bg-yellow-100 text-yellow-800'
                                             }`}>
                                                 {post.status === 'published' ? 'Dipublikasi' : 'Draft'}
                                             </span>
                                         </div>
-                                        
+
                                         <div className="flex gap-2 mt-3">
                                             <button
                                                 onClick={() => openModal(post)}

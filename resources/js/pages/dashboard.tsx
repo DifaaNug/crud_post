@@ -113,7 +113,7 @@ export default function Dashboard({ analytics }: DashboardProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard Analytics" />
-            
+
             <div className="space-y-6 p-6">
                 {/* Header */}
                 <div className="mb-8">
@@ -181,9 +181,9 @@ export default function Dashboard({ analytics }: DashboardProps) {
                 </div>
 
                 {/* Recent Items Section */}
-                <RecentItems 
-                    recentProducts={analytics.recentProducts} 
-                    recentPosts={analytics.recentPosts} 
+                <RecentItems
+                    recentProducts={analytics.recentProducts}
+                    recentPosts={analytics.recentPosts}
                 />
             </div>
         </AppLayout>

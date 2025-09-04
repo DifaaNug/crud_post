@@ -96,7 +96,7 @@ export default function RecentItems({ recentProducts, recentPosts }: RecentItems
                         {formatPrice(product.price)}
                       </p>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        product.stock > 10 
+                        product.stock > 10
                           ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                           : product.stock > 0
                           ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
