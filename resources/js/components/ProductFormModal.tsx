@@ -43,36 +43,30 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
 
     // Reset form ketika modal dibuka/ditutup atau product berubah
     useEffect(() => {
-        if (product) {
-            setFormData({
-                name: product.name,
-                price: product.price,
-                description: product.description,
-                image: product.image,
-                category: product.category,
-                stock: product.stock
-            });
+        if (isOpen) {
+            if (product) {
+                setFormData({
+                    name: product.name,
+                    price: product.price,
+                    description: product.description,
+                    image: product.image,
+                    category: product.category,
+                    stock: product.stock
+                });
 
-            // Set preview untuk gambar yang sudah ada
-            if (product.image) {
-                setPreview(`/storage/${product.image}`);
+                // Set preview untuk gambar yang sudah ada
+                if (product.image) {
+                    setPreview(`/storage/${product.image}`);
+                } else {
+                    setPreview("");
+                }
+                setSelectedFile(null);
             } else {
-                setPreview("");
+                // Reset form untuk tambah data baru
+                resetForm();
             }
-            setSelectedFile(null);
-        } else {
-            setFormData({
-                name: "",
-                price: "",
-                description: "",
-                image: "",
-                category: "",
-                stock: ""
-            });
-            setPreview("");
-            setSelectedFile(null);
         }
-    }, [product]);
+    }, [product, isOpen]);
 
     // Handle tombol escape dan scroll lock pada body
     useEffect(() => {
@@ -93,10 +87,24 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
         };
     }, [isOpen, closeModal]);
 
+    // Function untuk reset form
+    const resetForm = () => {
+        setFormData({
+            name: "",
+            price: "",
+            description: "",
+            image: "",
+            category: "",
+            stock: ""
+        });
+        setPreview("");
+        setSelectedFile(null);
+    };
+
     // Handle perubahan input
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
-        
+
         if (type === 'number') {
             // Izinkan string kosong agar bisa dihapus, convert ke number saat submit
             setFormData({
@@ -169,6 +177,7 @@ export default function ProductFormModal({ isOpen, closeModal, product, onSucces
                 forceFormData: true,
                 onSuccess: () => {
                     onSuccess?.('Product berhasil ditambahkan!', 'success');
+                    resetForm(); // Reset form setelah berhasil tambah
                     closeModal();
                 },
                 onError: (errors) => {

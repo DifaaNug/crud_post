@@ -78,6 +78,11 @@ export default function Products({ products = [] }: Props) {
         });
     };
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setSelectedProduct(null); // Reset selected product saat modal ditutup
+    };
+
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -185,7 +190,7 @@ export default function Products({ products = [] }: Props) {
             {/* Modal untuk tambah/edit product */}
             <ProductFormModal
                 isOpen={isModalOpen}
-                closeModal={() => setIsModalOpen(false)}
+                closeModal={handleCloseModal}
                 product={selectedProduct}
                 onSuccess={handleSuccess}
             />
