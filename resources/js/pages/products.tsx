@@ -93,7 +93,7 @@ export default function Products({ products = [] }: Props) {
     return (
         <AppLayout>
             <Head title="Products" />
-            
+
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -103,14 +103,14 @@ export default function Products({ products = [] }: Props) {
                                     <h1 className="text-2xl font-semibold text-gray-900">Products</h1>
                                     <p className="text-gray-600 mt-1">Kelola data produk Anda</p>
                                 </div>
-                                <button 
+                                <button
                                     onClick={handleCreate}
                                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
                                 >
                                     Tambah Product
                                 </button>
                             </div>
-                            
+
                             {products.length === 0 ? (
                                 <div className="text-center py-12">
                                     <div className="text-6xl mb-4">📦</div>
@@ -120,7 +120,7 @@ export default function Products({ products = [] }: Props) {
                                     <p className="text-gray-500 mb-4">
                                         Mulai tambahkan product pertama Anda!
                                     </p>
-                                    <button 
+                                    <button
                                         onClick={handleCreate}
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
                                     >
@@ -149,11 +149,11 @@ export default function Products({ products = [] }: Props) {
                                                         {product.category}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                                                     {product.description}
                                                 </p>
-                                                
+
                                                 <div className="flex justify-between items-center mb-4">
                                                     <span className="text-xl font-bold text-green-600">
                                                         {formatPrice(product.price)}
@@ -162,7 +162,7 @@ export default function Products({ products = [] }: Props) {
                                                         Stock: {product.stock}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex gap-2">
                                                     <button
                                                         onClick={() => handleEdit(product)}
