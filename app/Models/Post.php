@@ -14,5 +14,6 @@ class Post extends Model
         'title',
         'content',
         'picture',
+        'status', // Menambahkan status (draft/published)
     ];
 }
