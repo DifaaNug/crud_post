@@ -26,4 +26,6 @@ yarn-error.log
 /.vscode
 /.zed
 
+# Dokumentasi Postman (tidak perlu di-commit)
+POSTMAN_GUIDE.md
 POSTMAN_GUIDES.md
