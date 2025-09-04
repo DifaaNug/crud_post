@@ -41,6 +41,7 @@ class PostController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'picture' => $picturePath,
+            'status' => $request->status ?? 'draft', // Default ke draft jika tidak ada status
         ]);
 
         return redirect('/posts')->with('success', 'Post created.');
@@ -77,6 +78,7 @@ class PostController extends Controller
             'title' => $request->title,
             'content' => $request->content,
             'picture' => $picturePath,
+            'status' => $request->status ?? $post->status, // Gunakan status existing jika tidak ada input baru
         ]);
 
         return redirect('/posts')->with('success', 'Post updated successfully.');
