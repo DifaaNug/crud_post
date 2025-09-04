@@ -25,7 +25,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string>("");
 
-    //Code Untuk Efek Modal
+    // Efek untuk reset modal
     useEffect(() => {
         if (post) {
             setFormData({
@@ -71,7 +71,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
         };
     }, [isOpen, closemodal]);
 
-    //Setting untuk element textarea
+    // Pengaturan untuk element input
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
        setFormData({
            ...formData,
@@ -79,7 +79,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
        });
     };
 
-    //Setting Untuk Upload Gambar
+    // Pengaturan untuk upload gambar
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
        if(e.target.files && e.target.files[0]){
            const file = e.target.files[0];
@@ -88,7 +88,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
        }
     };
 
-    //Handle submit form
+    // Handle submit form
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -101,7 +101,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
         }
 
         if (post?.id) {
-            // Update existing post
+            // Update post yang sudah ada
             submitData.append('_method', 'PUT');
             router.post(`/posts/${post.id}`, submitData, {
                 forceFormData: true,
@@ -115,7 +115,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
                 }
             });
         } else {
-            // Create new post
+            // Buat post baru
             router.post('/posts', submitData, {
                 forceFormData: true,
                 onSuccess: () => {
@@ -130,7 +130,7 @@ export default function PostFormModal({isOpen, closemodal, post, onSuccess}: Pro
         }
     };
 
-    //Code ini diketik selanjutnya untuk handle input Form
+    // Kondisi untuk menampilkan modal
     if (!isOpen) return null;
 
     const handleBackdropClick = (e: React.MouseEvent) => {

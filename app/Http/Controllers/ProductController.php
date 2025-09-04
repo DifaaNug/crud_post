@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar semua produk.
      */
     public function index()
     {
@@ -22,7 +22,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan produk baru ke database.
      */
     public function store(Request $request)
     {
@@ -47,7 +47,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Mengupdate data produk yang sudah ada.
      */
     public function update(Request $request, Product $product)
     {
@@ -63,7 +63,7 @@ class ProductController extends Controller
         $data = $request->only(['name', 'price', 'description', 'category', 'stock']);
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
+            // Hapus gambar lama jika ada
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
@@ -76,11 +76,11 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus produk dari database.
      */
     public function destroy(Product $product)
     {
-        // Delete image if exists
+        // Hapus gambar jika ada
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }

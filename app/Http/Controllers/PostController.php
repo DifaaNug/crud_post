@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-//Import react
+// Import react
 use Inertia\Inertia;
 
 use App\Models\Post;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
-    //Method untuk memanggil halaman dashboard tabel post (index)
+    // Method untuk memanggil halaman dashboard tabel post (index)
     public function index(): Response
     {
         return Inertia::render('posts',[
@@ -19,10 +19,10 @@ class PostController extends Controller
         ]);
     }
 
-    //Method untuk kirim data ke database
+    // Method untuk kirim data ke database
     public function store(Request $request)
     {
-        //Validasi input
+        // Validasi input
         $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -36,7 +36,7 @@ class PostController extends Controller
             $picturePath = $request->file('picture')->store('posts', 'public');
         }
 
-        //Simpan data ke database
+        // Simpan data ke database
         Post::create([
             'title' => $request->title,
             'content' => $request->content,
@@ -46,10 +46,10 @@ class PostController extends Controller
         return redirect('/posts')->with('success', 'Post created.');
     }
 
-    //Method untuk ubah data
+    // Method untuk ubah data
     public function update(Request $request, Post $post)
     {
-        //Validasi input
+        // Validasi input
         $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -72,7 +72,7 @@ class PostController extends Controller
             $picturePath = $request->file('picture')->store('posts', 'public');
         }
 
-        //Update data di database
+        // Update data di database
         $post->update([
             'title' => $request->title,
             'content' => $request->content,
@@ -82,7 +82,7 @@ class PostController extends Controller
         return redirect('/posts')->with('success', 'Post updated successfully.');
     }
 
-    //Method untuk hapus data
+    // Method untuk hapus data
     public function destroy(Post $post)
     {
         // Delete picture file if exists
