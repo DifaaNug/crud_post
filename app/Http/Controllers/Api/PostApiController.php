@@ -12,17 +12,75 @@ use Illuminate\Support\Facades\Storage;
 class PostApiController extends Controller
 {
     /**
-     * Menampilkan semua data posts dengan pagination.
+     * Menampilkan semua data posts dengan pagination, search, dan filter.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
-            $posts = Post::orderBy('created_at', 'desc')->paginate(10);
+            $query = Post::query();
+
+            // Search berdasarkan title atau content
+            if ($request->has('search') && !empty($request->search)) {
+                $search = $request->search;
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('content', 'like', "%{$search}%");
+                });
+            }
+
+            // Filter berdasarkan status
+            if ($request->has('status') && !empty($request->status)) {
+                $query->where('status', $request->status);
+            }
+
+            // Filter berdasarkan tanggal (created_at)
+            if ($request->has('date_from') && !empty($request->date_from)) {
+                $query->whereDate('created_at', '>=', $request->date_from);
+            }
+            
+            if ($request->has('date_to') && !empty($request->date_to)) {
+                $query->whereDate('created_at', '<=', $request->date_to);
+            }
+
+            // Sorting
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+            
+            // Validasi sort_by untuk keamanan
+            $allowedSortFields = ['created_at', 'title', 'status', 'updated_at'];
+            if (!in_array($sortBy, $allowedSortFields)) {
+                $sortBy = 'created_at';
+            }
+            
+            // Validasi sort_order
+            $sortOrder = in_array(strtolower($sortOrder), ['asc', 'desc']) ? $sortOrder : 'desc';
+            
+            $query->orderBy($sortBy, $sortOrder);
+
+            // Pagination dengan custom per_page
+            $perPage = $request->get('per_page', 10);
+            $perPage = (int) $perPage;
+            
+            // Batasi per_page maksimal 100
+            if ($perPage > 100) {
+                $perPage = 100;
+            }
+
+            $posts = $query->paginate($perPage);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Data posts berhasil diambil',
-                'data' => $posts
+                'data' => $posts,
+                'filters' => [
+                    'search' => $request->search,
+                    'status' => $request->status,
+                    'date_from' => $request->date_from,
+                    'date_to' => $request->date_to,
+                    'sort_by' => $sortBy,
+                    'sort_order' => $sortOrder,
+                    'per_page' => $perPage
+                ]
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
