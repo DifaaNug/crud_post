@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostApiController;
 use App\Http\Controllers\Api\ProductApiController;
+use App\Http\Controllers\Api\DashboardApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,21 +40,11 @@ Route::prefix('products')->group(function () {
     Route::delete('/{id}', [ProductApiController::class, 'destroy']);  // DELETE /api/products/{id} - Hapus product
 });
 
-// Route untuk mendapatkan statistik dashboard
-Route::get('/dashboard/stats', function () {
-    $totalProducts = \App\Models\Product::count();
-    $totalPosts = \App\Models\Post::count();
-    $publishedPosts = \App\Models\Post::where('status', 'published')->count();
-    $lowStockProducts = \App\Models\Product::where('stock', '<', 10)->count();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Statistik dashboard berhasil diambil',
-        'data' => [
-            'total_products' => $totalProducts,
-            'total_posts' => $totalPosts,
-            'published_posts' => $publishedPosts,
-            'low_stock_products' => $lowStockProducts
-        ]
-    ]);
+// API Routes untuk Dashboard
+Route::prefix('dashboard')->group(function () {
+    Route::get('/stats', [DashboardApiController::class, 'stats']);                    // GET /api/dashboard/stats - Statistik umum
+    Route::get('/posts-chart', [DashboardApiController::class, 'postsChart']);         // GET /api/dashboard/posts-chart - Chart data posts
+    Route::get('/products-chart', [DashboardApiController::class, 'productsChart']);   // GET /api/dashboard/products-chart - Chart data products
+    Route::get('/recent-activities', [DashboardApiController::class, 'recentActivities']); // GET /api/dashboard/recent-activities - Recent activities
+    Route::get('/export/posts', [DashboardApiController::class, 'exportPosts']);       // GET /api/dashboard/export/posts - Export posts to CSV
 });
