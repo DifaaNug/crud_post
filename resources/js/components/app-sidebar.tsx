@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { FileText, BookOpen, Folder, LayoutGrid, Package } from 'lucide-react';
+import { FileText, BookOpen, Folder, LayoutGrid, Package, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -25,6 +25,12 @@ const mainNavItems: NavItem[] = [
         title: 'Products',
         href: '/products',
         icon: Package,
+    },
+
+    {
+        title: 'Users',
+        href: '/users',
+        icon: Users,
     }
 
 ];
