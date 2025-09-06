@@ -95,14 +95,14 @@ class DashboardApiController extends Controller
             // Format data untuk chart
             $chartData = [];
             $dates = [];
-            
+
             // Generate all dates in range
             $current = $startDate->copy();
             while ($current <= Carbon::now()) {
                 $dateKey = $current->format($period === 'year' ? 'Y-m' : 'Y-m-d');
                 $dates[] = $dateKey;
                 $chartData[$dateKey] = ['published' => 0, 'draft' => 0];
-                
+
                 if ($period === 'year') {
                     $current->addMonth();
                 } else {
@@ -235,7 +235,7 @@ class DashboardApiController extends Controller
             if ($request->has('date_from') && !empty($request->date_from)) {
                 $query->whereDate('created_at', '>=', $request->date_from);
             }
-            
+
             if ($request->has('date_to') && !empty($request->date_to)) {
                 $query->whereDate('created_at', '<=', $request->date_to);
             }
@@ -268,6 +268,67 @@ class DashboardApiController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal export data posts',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Export data products ke CSV format.
+     */
+    public function exportProducts(Request $request): JsonResponse
+    {
+        try {
+            $query = Product::query();
+
+            // Apply filters
+            if ($request->has('category') && !empty($request->category)) {
+                $query->where('category', $request->category);
+            }
+
+            if ($request->has('min_price') && !empty($request->min_price)) {
+                $query->where('price', '>=', $request->min_price);
+            }
+
+            if ($request->has('max_price') && !empty($request->max_price)) {
+                $query->where('price', '<=', $request->max_price);
+            }
+
+            if ($request->has('min_stock') && !empty($request->min_stock)) {
+                $query->where('stock', '>=', $request->min_stock);
+            }
+
+            $products = $query->orderBy('created_at', 'desc')->get();
+
+            // Generate CSV data
+            $csvData = "ID,Name,Category,Price,Stock,Description,Created At,Updated At\n";
+            foreach ($products as $product) {
+                $csvData .= sprintf(
+                    '"%s","%s","%s","%s","%s","%s","%s","%s"' . "\n",
+                    $product->id,
+                    str_replace('"', '""', $product->name),
+                    str_replace('"', '""', $product->category),
+                    $product->price,
+                    $product->stock,
+                    str_replace('"', '""', $product->description ?? ''),
+                    $product->created_at->format('Y-m-d H:i:s'),
+                    $product->updated_at->format('Y-m-d H:i:s')
+                );
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data export products berhasil digenerate',
+                'data' => [
+                    'filename' => 'products_export_' . date('Y-m-d_H-i-s') . '.csv',
+                    'content' => base64_encode($csvData),
+                    'total_records' => $products->count()
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal export data products',
                 'error' => $e->getMessage()
             ], 500);
         }
