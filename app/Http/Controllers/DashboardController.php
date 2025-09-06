@@ -64,7 +64,7 @@ class DashboardController extends Controller
 
         $recentPosts = Post::orderBy('created_at', 'desc')
             ->take(5)
-            ->get(['id', 'title', 'content', 'status', 'created_at']);
+            ->get(['id', 'title', 'content', 'picture', 'status', 'created_at']);
 
         $recentUsers = User::orderBy('created_at', 'desc')
             ->take(5)
