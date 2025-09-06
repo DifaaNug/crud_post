@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +19,11 @@ class DashboardController extends Controller
         // Total statistik
         $totalProducts = Product::count();
         $totalPosts = Post::count();
+        $totalUsers = User::count();
         $publishedPosts = Post::where('status', 'published')->count();
         $lowStockProducts = Product::where('stock', '<', 10)->count();
+        $verifiedUsers = User::whereNotNull('email_verified_at')->count();
+        $unverifiedUsers = User::whereNull('email_verified_at')->count();
 
         // Distribusi kategori produk
         $categoryDistribution = Product::select('category', DB::raw('count(*) as count'))
@@ -47,6 +51,9 @@ class DashboardController extends Controller
                 'posts' => Post::whereYear('created_at', $date->year)
                     ->whereMonth('created_at', $date->month)
                     ->count(),
+                'users' => User::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
+                    ->count(),
             ];
         }
 
@@ -59,17 +66,25 @@ class DashboardController extends Controller
             ->take(5)
             ->get(['id', 'title', 'content', 'status', 'created_at']);
 
+        $recentUsers = User::orderBy('created_at', 'desc')
+            ->take(5)
+            ->get(['id', 'name', 'email', 'email_verified_at', 'created_at']);
+
         return Inertia::render('dashboard', [
             'analytics' => [
                 'totalProducts' => $totalProducts,
                 'totalPosts' => $totalPosts,
+                'totalUsers' => $totalUsers,
                 'publishedPosts' => $publishedPosts,
                 'lowStockProducts' => $lowStockProducts,
+                'verifiedUsers' => $verifiedUsers,
+                'unverifiedUsers' => $unverifiedUsers,
                 'categoryDistribution' => $categoryDistribution,
                 'stockAnalysis' => $stockAnalysis,
                 'monthlyData' => $monthlyData,
                 'recentProducts' => $recentProducts,
                 'recentPosts' => $recentPosts,
+                'recentUsers' => $recentUsers,
             ]
         ]);
     }
