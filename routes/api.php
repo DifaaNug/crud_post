@@ -47,4 +47,5 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/products-chart', [DashboardApiController::class, 'productsChart']);   // GET /api/dashboard/products-chart - Chart data products
     Route::get('/recent-activities', [DashboardApiController::class, 'recentActivities']); // GET /api/dashboard/recent-activities - Recent activities
     Route::get('/export/posts', [DashboardApiController::class, 'exportPosts']);       // GET /api/dashboard/export/posts - Export posts to CSV
+    Route::get('/export/products', [DashboardApiController::class, 'exportProducts']); // GET /api/dashboard/export/products - Export products to CSV
 });
