@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Head, usePage, router } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
 import { type BreadcrumbItem } from '@/types';
 import UserFormModal from "@/components/UserFormModal";
 import ExportButton from "@/components/ExportButton";
 import { exportUsers } from "@/utils/exportHelpers";
+import ArchiveButton from '@/components/ArchiveButton';
 import Swal from 'sweetalert2';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -57,40 +58,6 @@ export default function Users() {
             icon: 'error',
             confirmButtonText: 'OK',
             confirmButtonColor: '#ef4444'
-        });
-    };
-
-    const handleDelete = (user: UserType) => {
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: `Apakah Anda yakin ingin menghapus user "${user.name}"?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.delete(`/users/${user.id}`, {
-                    onSuccess: () => {
-                        Swal.fire({
-                            title: 'Terhapus!',
-                            text: 'User berhasil dihapus.',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                    },
-                    onError: () => {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Gagal menghapus user. Silakan coba lagi.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
         });
     };
 
@@ -241,12 +208,12 @@ export default function Users() {
                                                                 >
                                                                     Ubah
                                                                 </button>
-                                                                <button
-                                                                    onClick={() => handleDelete(user)}
-                                                                    className="bg-red-500 text-sm text-white rounded px-3 py-1.5 hover:bg-red-600 transition-colors shadow-sm"
-                                                                >
-                                                                    Hapus
-                                                                </button>
+                                                                <ArchiveButton
+                                                                    itemType="user"
+                                                                    itemId={user.id}
+                                                                    itemName={user.name}
+                                                                    size="sm"
+                                                                />
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -277,7 +244,7 @@ export default function Users() {
                                                         {user.email_verified_at ? '✅ Verified' : '⚠️ Unverified'}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="space-y-2 mb-4">
                                                     <div>
                                                         <label className="text-xs font-medium text-gray-500 uppercase tracking-wider">Email</label>
@@ -288,7 +255,7 @@ export default function Users() {
                                                         <p className="text-sm text-gray-900">{user.created_at ? formatDate(user.created_at) : 'N/A'}</p>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="flex gap-2">
                                                     <button
                                                         onClick={() => openModal(user)}
@@ -296,12 +263,13 @@ export default function Users() {
                                                     >
                                                         Ubah
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleDelete(user)}
-                                                        className="flex-1 bg-red-500 text-sm text-white rounded px-3 py-2 hover:bg-red-600 transition-colors shadow-sm"
-                                                    >
-                                                        Hapus
-                                                    </button>
+                                                    <ArchiveButton
+                                                        itemType="user"
+                                                        itemId={user.id}
+                                                        itemName={user.name}
+                                                        className="flex-1"
+                                                        size="sm"
+                                                    />
                                                 </div>
                                             </div>
                                         ))}
