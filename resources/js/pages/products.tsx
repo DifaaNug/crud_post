@@ -1,9 +1,10 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, router } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import ProductFormModal from '@/components/ProductFormModal';
 import ExportButton from '@/components/ExportButton';
 import { exportProducts } from '@/utils/exportHelpers';
+import ArchiveButton from '@/components/ArchiveButton';
 import Swal from 'sweetalert2';
 
 interface Product {
@@ -34,40 +35,6 @@ export default function Products({ products = [] }: Props) {
     const handleEdit = (product: Product) => {
         setSelectedProduct(product);
         setIsModalOpen(true);
-    };
-
-    const handleDelete = (product: Product) => {
-        Swal.fire({
-            title: 'Hapus Product?',
-            text: `Yakin ingin menghapus "${product.name}"? Data tidak bisa dikembalikan!`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.delete(`/products/${product.id}`, {
-                    onSuccess: () => {
-                        Swal.fire({
-                            title: 'Terhapus!',
-                            text: 'Product berhasil dihapus.',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        });
-                    },
-                    onError: () => {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Gagal menghapus product. Silakan coba lagi.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
     };
 
     const handleSuccess = (message: string, type: 'success' | 'error') => {
@@ -187,12 +154,13 @@ export default function Products({ products = [] }: Props) {
                                                     >
                                                         ✏️ Edit
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleDelete(product)}
-                                                        className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium"
-                                                    >
-                                                        🗑️ Hapus
-                                                    </button>
+                                                    <ArchiveButton
+                                                        itemType="product"
+                                                        itemId={product.id}
+                                                        itemName={product.name}
+                                                        className="w-full sm:w-auto"
+                                                        size="sm"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
