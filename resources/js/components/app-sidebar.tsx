@@ -1,57 +1,54 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { FileText, BookOpen, Folder, LayoutGrid, Package, Users } from 'lucide-react';
+import { FileText, BookOpen, Folder, LayoutGrid, Package, Users, FolderOpen, User, FileStack, Globe } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const appsFeatures: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
+        title: 'E-Prosedur',
+        href: '#',
+        icon: FileStack,
     },
-
     {
-        title: 'Post',
-        href: '/posts',
-        icon: FileText,
+        title: 'Employee Directory',
+        href: '#',
+        icon: User,
     },
-
     {
-        title: 'Products',
-        href: '/products',
+        title: 'SIADIL',
+        href: '/test-archive',
+        icon: FolderOpen,
+    },
+    {
+        title: 'SYSTIK',
+        href: '#',
+        icon: Globe,
+    },
+    {
+        title: 'Konsumsi',
+        href: '#',
         icon: Package,
     },
-
     {
-        title: 'Users',
-        href: '/users',
-        icon: Users,
-    }
-
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'Dokumenku',
+        href: '#',
+        icon: FileText,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'MyStatement',
+        href: '#',
+        icon: FileText,
     },
 ];
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="inset" className="h-screen">
+            <SidebarHeader className="pb-4 border-b border-sidebar-border/50">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -63,12 +60,55 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
-                <NavMain items={mainNavItems} />
+            <SidebarContent className="pt-2 px-0 space-y-0 sidebar-scroll overflow-y-auto">
+                {/* GENERALS Section */}
+                <NavMain items={[
+                    {
+                        title: 'Home',
+                        href: dashboard(),
+                        icon: LayoutGrid,
+                    },
+                    {
+                        title: 'Profile',
+                        href: '#',
+                        icon: User,
+                    },
+                    {
+                        title: 'Employment',
+                        href: '#',
+                        icon: Users,
+                    },
+                ]} groupTitle="GENERALS" />
+
+                {/* MAIN MENU Section */}
+                <NavMain items={[
+                    {
+                        title: 'Portal Aplikasi',
+                        href: '#',
+                        icon: Globe,
+                    },
+                    {
+                        title: 'Kujang AI',
+                        href: '#',
+                        icon: FileText,
+                    },
+                    {
+                        title: 'Library',
+                        href: '#',
+                        icon: BookOpen,
+                    },
+                    {
+                        title: 'Shortlink',
+                        href: '#',
+                        icon: Folder,
+                    },
+                ]} groupTitle="MAIN MENU" />
+
+                {/* APPS & FEATURES Section */}
+                <NavMain items={appsFeatures} groupTitle="APPS & FEATURES" />
             </SidebarContent>
 
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+            <SidebarFooter className="pt-4 border-t border-sidebar-border/50">
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
