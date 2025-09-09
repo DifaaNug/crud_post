@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Head, usePage, router } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import AppLayout from "@/layouts/app-layout";
 import PostFormModal from "@/components/PostFormModal";
 import ExportButton from "@/components/ExportButton";
 import { exportPosts } from "@/utils/exportHelpers";
+import ArchiveButton from "@/components/ArchiveButton";
 import Swal from 'sweetalert2';
 
 export default function Posts() {
@@ -44,42 +45,6 @@ export default function Posts() {
             confirmButtonColor: '#ef4444'
         });
     };
-
-    const handleDelete = (post: PostType) => {
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: `Apakah Anda yakin ingin menghapus post "${post.title}"?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                router.delete(`/posts/${post.id}`, {
-                    onSuccess: () => {
-                        Swal.fire({
-                            title: 'Berhasil!',
-                            text: 'Data berhasil dihapus!',
-                            icon: 'success',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#10b981'
-                        });
-                    },
-                    onError: () => {
-                        Swal.fire({
-                            title: 'Error!',
-                            text: 'Gagal menghapus data. Silakan coba lagi.',
-                            icon: 'error',
-                            confirmButtonText: 'OK',
-                            confirmButtonColor: '#ef4444'
-                        });
-                    }
-                });
-            }
-        });
-    }
 
     return(
         <AppLayout>
@@ -181,12 +146,13 @@ export default function Posts() {
                                                                 >
                                                                     Edit
                                                                 </button>
-                                                                <button
-                                                                    onClick={() => handleDelete(post)}
-                                                                    className="bg-red-500 text-sm text-white rounded px-3 py-1.5 hover:bg-red-600 transition-colors shadow-sm"
-                                                                >
-                                                                    Hapus
-                                                                </button>
+                                                                <ArchiveButton
+                                                                    itemType="post"
+                                                                    itemId={post.id}
+                                                                    itemName={post.title}
+                                                                    size="sm"
+                                                                    className="text-sm px-3 py-1.5"
+                                                                />
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -247,12 +213,13 @@ export default function Posts() {
                                                         >
                                                             ✏️ Edit
                                                         </button>
-                                                        <button
-                                                            onClick={() => handleDelete(post)}
-                                                            className="flex-1 bg-red-500 text-white rounded px-3 py-2 text-sm hover:bg-red-600 transition-colors shadow-sm font-medium"
-                                                        >
-                                                            🗑️ Hapus
-                                                        </button>
+                                                        <ArchiveButton
+                                                            itemType="post"
+                                                            itemId={post.id}
+                                                            itemName={post.title}
+                                                            size="sm"
+                                                            className="flex-1 text-sm px-3 py-2"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>
